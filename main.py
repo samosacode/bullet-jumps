@@ -25,9 +25,12 @@ bullet = pyg.image.load("images/bullet.png").convert_alpha()
 bullet = scaleup(bullet,4,4)
 
 pyg.mixer.music.load("music/bgm_1.ogg")
+pyg.mixer.music.set_volume(0.5)
 pyg.mixer.music.play(-1)
 click = pyg.mixer.Sound("music/click.wav")
+click.set_volume(0.3)
 death = pyg.mixer.Sound("music/death.wav")
+death.set_volume(0.3)
 
 #variables
 player_x = 0
@@ -41,6 +44,7 @@ onground = False
 gravity = 0.8
 score = 0
 menu = True
+death_played = False
 
 #game loop
 alive = True
@@ -58,6 +62,7 @@ while running:
 		    bullet_speed_increase = 0
 		    alive = True
 		    bullet_x_offset = 0
+		    death_played = False
 		    click.play()
 		if event.type == pyg.MOUSEBUTTONDOWN and menu:
 		    menu = False
@@ -95,7 +100,9 @@ while running:
 	## death
 	if 650 - bullet_x_offset >= player_x and 650 - bullet_x_offset <= player.get_width() + player_x and bullet_y_pos >= player_y and bullet_y_pos <= player_y + player.get_height():
 	    alive = False
-	    death.play()
+	    if not death_played:
+	        death.play()
+	        death_played = True
 	 
 	## score
 	if 650 - bullet_x_offset < player_x:
